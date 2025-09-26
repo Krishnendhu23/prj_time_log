@@ -7,7 +7,7 @@ use App\Models\WorkLogUserEntry;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class StoreLeaveRequest extends FormRequest
+class UpdateLeaveRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -38,7 +38,11 @@ class StoreLeaveRequest extends FormRequest
             $start  = $this->input('start_date');
             $end    = $this->input('end_date');
 
+            //check leave exists for the same date range excluding current leave id
+            $leaveId = $this->route('id');
+             
             $leaveExists = Leave::where('user_id', $userId)
+                ->where('id', '!=', $leaveId)
                 ->where(function ($query) use ($start, $end) {
                     $query->whereBetween('start_date', [$start, $end])
                         ->orWhereBetween('end_date', [$start, $end])

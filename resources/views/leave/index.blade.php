@@ -23,7 +23,7 @@
         </thead>
         <tbody>
             @if($leaves->isEmpty())
-                <tr><td colspan="5">No leave requests found.</td></tr>
+                <tr><td colspan="5" class="text-center text-danger">No leave requests found.</td></tr>
             @else
                 @foreach($leaves as $leave)
                 <tr>

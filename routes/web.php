@@ -43,8 +43,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/leave', [LeaveController::class, 'index'])->name('leave.index');
     Route::get('/leave/create', [LeaveController::class, 'create'])->name('leave.create');
     Route::post('/leave', [LeaveController::class, 'store'])->name('leave.store');
-    Route::get('/leave/{entry}', [LeaveController::class, 'show'])->name('leave.show');
-    Route::get('/leave/{entry}/edit', [LeaveController::class, 'edit'])->name('leave.edit');
-    Route::put('/leave/{entry}', [LeaveController::class, 'update'])->name('leave.update');
-    Route::delete('/leave/{entry}', [LeaveController::class, 'destroy'])->name('leave.destroy');
+    Route::get('/leave/{id}/edit', [LeaveController::class, 'edit'])->name('leave.edit');
+    Route::put('/leave/{id}', [LeaveController::class, 'update'])->name('leave.update');
+    Route::delete('/leave/{id}', [LeaveController::class, 'destroy'])->name('leave.destroy');
 });
