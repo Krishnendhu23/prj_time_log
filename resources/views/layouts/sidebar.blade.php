@@ -15,13 +15,13 @@
         <li class="nav-item">
           <a href="{{ route('work-log.index') }}" class="nav-link">
             <i class="nav-icon fas fa-clipboard-list"></i>
-            <p>Work Log Management</p>
+            <p>Work Log Entry</p>
           </a>
         </li>
         <li class="nav-item">
           <a href="{{ route('leave.index') }}" class="nav-link">
             <i class="nav-icon fas fa-calendar-alt"></i>
-            <p>Leave Management </p>
+            <p>Leave Entry </p>
           </a>
         </li>
       </ul>
