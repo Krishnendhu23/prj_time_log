@@ -10,7 +10,7 @@
         </div>
 
         <div class="card-body">
-            <p class="lead">Here you can manage your work logs and leaves here.</p>
+            <p class="lead">Here you can manage your work logs and leaves.</p>
         </div>
     </div>
 </div>
