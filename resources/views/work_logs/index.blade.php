@@ -15,12 +15,12 @@
     <table class="table table-bordered align-middle">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Project</th>
-                <th>Task Description</th>
-                <th>Time (HH:MM)</th>
-                <th>Total</th>
-                <th>Actions</th>
+                <th style="width: 15%;">Date</th>
+                <th style="width: 15%;">Project</th>
+                <th style="width: 30%;">Task Description</th>
+                <th style="width: 5%;">Time (HH:MM)</th>
+                <th style="width: 5%;">Total Hrs</th>
+                <th style="width: 5%;">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -49,7 +49,7 @@
                             @endif
 
                             <td>{{ $task->project->name }}</td>
-                            <td>{{ $task->task_description }}</td>
+                            <td >{{ $task->task_description }}</td>
                             <td>{{ $task->log_hours }}</td>
 
                             @if($index === 0)
@@ -58,11 +58,11 @@
 
                             {{-- Actions rowspan --}}
                             <td rowspan="{{ $taskCount }}">
-                                <a href="{{ route('work-log.edit', $entry->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                <a href="{{ route('work-log.edit', $entry->id) }}" ><i class="fas fa-edit"></i></a>
                                 <form action="{{ route('work-log.destroy', $entry->id) }}" method="POST" style="display:inline-block">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this data?')">Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this data?')"><i class="fas fa-trash"></i></button>
                                 </form>
                             </td>
                             @endif

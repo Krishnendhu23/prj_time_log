@@ -29,14 +29,14 @@
                 <tr>
                     <td>{{ $leave->start_date->format('d-m-Y') }}</td>
                     <td>{{ $leave->end_date->format('d-m-Y') }}</td>
-                    <td>{{ $leave->reason }}</td>
+                    <td style="width: 60%;">{{ $leave->reason }}</td>
                     <!-- <td>{{ $leave->status }}</td> -->
                     <td>
-                        <a href="{{ route('leave.edit', $leave->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                        <a href="{{ route('leave.edit', $leave->id) }}" ><i class="fas fa-edit"></i></a>
                         <form action="{{ route('leave.destroy', $leave->id) }}" method="POST" style="display:inline-block">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this data?')">Delete</button>
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this data?')"><i class="fas fa-trash"></i></button>
                         </form>
                     </td>
                 </tr>
