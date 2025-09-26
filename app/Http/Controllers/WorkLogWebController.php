@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreWorkLogRequest;
+use App\Http\Requests\UpdateWorkLogRequest;
 use App\Models\Project;
 use App\Models\WorkLogUserEntry;
 use App\Models\WorkLogUserTask;
@@ -38,7 +39,7 @@ class WorkLogWebController extends Controller
             $totalMinutes = 0;
            
             foreach ($request->tasks as $task) {
-                [$h, $m] = explode(':', $task['hours_minutes']);
+                [$h, $m] = explode(':', $task['log_hours']);
                 $minutes = ((int)$h * 60) + (int)$m;
 
                 if ($minutes > 600) { // max 10 hours per task
@@ -66,7 +67,7 @@ class WorkLogWebController extends Controller
                     'work_log_user_entry_id' => $entry->id,
                     'project_id' => $task['project_id'],
                     'task_description' => $task['task_description'],
-                    'log_hours' => $task['hours_minutes']
+                    'log_hours' => $task['log_hours']
                 ]);
             }
 
@@ -80,10 +81,77 @@ class WorkLogWebController extends Controller
         }
     }
 
+    // Show form to edit work log
+    public function edit($id)
+    {
+        $entry = WorkLogUserEntry::findOrFail($id);
+        $this->authorizeEntry($entry);
+        $projects = Project::all();
+        $entry->load('tasks');
+        return view('work_logs.edit', compact('entry', 'projects'));
+    } 
+    
+    // Update work log
+    public function update(UpdateWorkLogRequest  $request, $id)
+    {
+        $entry = WorkLogUserEntry::findOrFail($id);
+        $this->authorizeEntry($entry);
+
+        try {
+            $totalMinutes = 0;
+           
+            foreach ($request->tasks as $task) {
+                [$h, $m] = explode(':', $task['log_hours']);
+                $minutes = ((int)$h * 60) + (int)$m;
+
+                if ($minutes > 600) { // max 10 hours per task
+                    return back()->withErrors(['tasks' => 'Each task cannot exceed 10 hours'])->withInput();
+                }
+
+                $totalMinutes += $minutes;
+            }
+            
+            if ($totalMinutes > 600) {
+                return back()->withErrors(['tasks' => 'Total work hours for the day cannot exceed 10 hours'])->withInput();
+            }
+
+            DB::beginTransaction();
+
+            // Update parent entry
+            $entry->update([
+                'date' => $request->date,
+            ]);
+
+            // Delete existing tasks
+            WorkLogUserTask::where('work_log_user_entry_id', $entry->id)->delete();
+
+            //dd($request->tasks);
+
+            // Create new tasks
+            foreach ($request->tasks as $task) {
+                WorkLogUserTask::create([
+                    'work_log_user_entry_id' => $entry->id,
+                    'project_id' => $task['project_id'],
+                    'task_description' => $task['task_description'],
+                    'log_hours' => $task['log_hours']
+                ]);
+            }
+
+            DB::commit();
+
+            return redirect()->route('work-log.index')->with('success', 'Work log updated successfully');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['message' => 'Failed to update work log', 'error' => $e->getMessage()])->withInput();
+        }
+    }
+
 
     // Delete work log
-    public function destroy(WorkLogUserEntry $entry)
+    public function destroy($id)
     {
+        $entry = WorkLogUserEntry::findOrFail($id);
         $this->authorizeEntry($entry);
         $entry->delete();
         return redirect()->route('work-log.index')->with('success', 'Work log deleted successfully.');

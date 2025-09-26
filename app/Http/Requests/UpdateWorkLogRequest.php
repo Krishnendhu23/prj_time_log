@@ -6,9 +6,8 @@ use App\Models\Leave;
 use App\Models\WorkLogUserEntry;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 
-class StoreWorkLogRequest extends FormRequest
+class UpdateWorkLogRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +25,7 @@ class StoreWorkLogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date' => ['required','date','before_or_equal:today'],
+            'date' => ['required', 'date', 'before_or_equal:today'],
             'tasks' => 'required|array|min:1',
             'tasks.*.project_id' => 'required|exists:projects,id',
             'tasks.*.task_description' => 'required|string',
@@ -41,8 +40,11 @@ class StoreWorkLogRequest extends FormRequest
             $userId = Auth::id();
             $date   = $this->input('date');
 
+            $entryId = $this->route('id');
+
             // Check if a work log already exists for this date
             if (WorkLogUserEntry::where('user_id', $userId)
+                ->where('id', '!=', $entryId)
                 ->where('date', $date)
                 ->whereNull('deleted_at')
                 ->exists()

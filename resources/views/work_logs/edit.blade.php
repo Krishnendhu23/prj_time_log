@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Add Work Log</h2>
+    <h2>Edit Work Log</h2>
 
     @if($errors->any())
     <div class="alert alert-danger">
@@ -14,12 +14,13 @@
     </div>
     @endif
 
-    <form action="{{ route('work-log.store') }}" method="POST">
+    <form action="{{ route('work-log.update', $entry->id) }}" method="POST">
         @csrf
+        @method('PUT')
         <div class="mb-2 row">
             <label for="date" class="col-sm-2 col-form-label">Date</label>
             <div class="col-sm-4">
-                <input type="date" name="date" id="date" class="form-control" max="{{ date('Y-m-d') }}" value="{{ old('date') }}" required>
+                <input type="date" name="date" id="date" class="form-control" max="{{ date('Y-m-d') }}" value="{{ old('date', $entry->date->format('Y-m-d')) }}" required>
             </div>
         </div>
 
@@ -41,11 +42,18 @@
         </div>
 
         <div id="tasks-container" class="mb-3">
+
             @php
-            $oldTasks = old('tasks', [['project_id' => '', 'task_description' => '', 'log_hours' => '']]);
+                $oldTasks = old('tasks', $entry->tasks->map(function($task){
+                    return [
+                        'project_id' => $task->project_id,
+                        'task_description' => $task->task_description,
+                        'log_hours' => $task->log_hours
+                    ];
+                })->toArray());
             @endphp
 
-            @foreach($oldTasks as $index => $task)
+            @foreach($oldTasks  as $index => $task)
             <div class="task-item row mb-2 align-items-center">
                 <div class="col-md-3">
                     <select name="tasks[{{ $index }}][project_id]" class="form-control @error('tasks.' . $index . '.project_id') is-invalid @enderror" required>
@@ -60,7 +68,7 @@
                 </div>
 
                 <div class="col-md-6">
-                    <textarea  
+                     <textarea  
                         name="tasks[{{ $index }}][task_description]"
                         class="form-control @error('tasks.' . $index . '.task_description') is-invalid @enderror"
                         placeholder="Task Description"
@@ -96,7 +104,7 @@
 
         <button type="button" id="add-task" class="btn btn-secondary">Add Task</button>
         <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-primary me-2">Submit</button>
+            <button type="submit" class="btn btn-primary me-2">Update</button>
             <button type="button" class="btn btn-warning" onclick="window.location='{{ route('work-log.index') }}'">Cancel</button>
     </form>
 </div>
@@ -104,7 +112,7 @@
 
 
 <script>
-    let taskIndex = 1;
+    let taskIndex = {{ count($oldTasks) }};
 
     // Add new task row
     document.getElementById('add-task').addEventListener('click', function() {

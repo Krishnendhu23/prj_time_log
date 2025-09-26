@@ -19,6 +19,8 @@ class WorkLogUserEntry extends Model
         'deleted_at'
     ];
 
+    protected $casts = [ 'date' => 'date'];
+
     public function tasks()
     {
         return $this->hasMany(WorkLogUserTask::class, 'work_log_user_entry_id');

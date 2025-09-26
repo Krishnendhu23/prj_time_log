@@ -45,7 +45,7 @@
                         <tr>
                             @if($index === 0)
                             {{-- Date rowspan --}}
-                            <td rowspan="{{ $taskCount }}">{{ $entry->formatted_date  }}</td>
+                            <td rowspan="{{ $taskCount }}" class="text-bold">{{ $entry->formatted_date  }}</td>
                             @endif
 
                             <td>{{ $task->project->name }}</td>

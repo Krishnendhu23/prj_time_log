@@ -23,7 +23,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended('/work_logs'); // redirect to work log dashboard
+            return redirect()->intended('dashboard'); // redirect to work log dashboard
         }
 
         return back()->withErrors([
@@ -37,6 +37,6 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login');
+        return redirect('login');
     }
 }

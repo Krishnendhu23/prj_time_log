@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 // Guest routes
@@ -25,6 +25,8 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 });
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout.post');
 
 Route::get('dashboard', function () { return view('dashboard');})->name('dashboard');
 
@@ -34,10 +36,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/work-log', [WorkLogWebController::class, 'index'])->name('work-log.index');
     Route::get('/work-log/create', [WorkLogWebController::class, 'create'])->name('work-log.create');
     Route::post('/work-log', [WorkLogWebController::class, 'store'])->name('work-log.store');
-    Route::get('/work-log/{entry}', [WorkLogWebController::class, 'show'])->name('work-log.show');
-    Route::get('/work-log/{entry}/edit', [WorkLogWebController::class, 'edit'])->name('work-log.edit');
-    Route::put('/work-log/{entry}', [WorkLogWebController::class, 'update'])->name('work-log.update');
-    Route::delete('/work-log/{entry}', [WorkLogWebController::class, 'destroy'])->name('work-log.destroy');
+    Route::get('/work-log/{id}', [WorkLogWebController::class, 'show'])->name('work-log.show');
+    Route::get('/work-log/{id}/edit', [WorkLogWebController::class, 'edit'])->name('work-log.edit');
+    Route::put('/work-log/{id}', [WorkLogWebController::class, 'update'])->name('work-log.update');
+    Route::delete('/work-log/{id}', [WorkLogWebController::class, 'destroy'])->name('work-log.destroy');
 
     // Leave Resource Routes
     Route::get('/leave', [LeaveController::class, 'index'])->name('leave.index');

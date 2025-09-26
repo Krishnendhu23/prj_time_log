@@ -1,6 +1,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <a href="{{ route('dashboard') }}" class="brand-link text-center">
-    <span class="brand-text font-weight-light">User Panel</span>
+    <i class="fas fa-user fa-2x"></i>
+    <span class="brand-text font-weight-light">{{ Auth::user()->name }}</span>
   </a>
 
   <div class="sidebar">
