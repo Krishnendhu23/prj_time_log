@@ -23,7 +23,7 @@
     </div>
 
     <footer class="main-footer text-center">
-      <strong>Admin Portal</strong> &copy; {{ date('Y') }}
+      <strong>User Portal</strong> &copy; {{ date('Y') }}
     </footer>
   </div>
 
