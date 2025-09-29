@@ -27,7 +27,7 @@ class WorkLogWebController extends Controller
     // Show form to create work log
     public function create()
     {
-        $projects = Project::all();
+        $projects = Project::where('status', 1)->get();
         return view('work_logs.create', compact('projects'));
     }
 
@@ -86,7 +86,7 @@ class WorkLogWebController extends Controller
     {
         $entry = WorkLogUserEntry::findOrFail($id);
         $this->authorizeEntry($entry);
-        $projects = Project::all();
+        $projects = Project::where('status', 1)->get();
         $entry->load('tasks');
         return view('work_logs.edit', compact('entry', 'projects'));
     } 
