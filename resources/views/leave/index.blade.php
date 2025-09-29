@@ -41,6 +41,11 @@
                     </td>
                 </tr>
                 @endforeach
+                <tr>
+                    <td colspan="6" class="text-center">
+                        {{ $leaves->links('pagination::bootstrap-5') }}
+                    </td>  
+                </tr>
             @endif
         </tbody>
     </table>

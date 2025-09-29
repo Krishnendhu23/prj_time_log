@@ -20,7 +20,7 @@ class WorkLogWebController extends Controller
         $entries = WorkLogUserEntry::with(['tasks','tasks.project'])
             ->where('user_id', Auth::id())
             ->orderByDesc('date')
-            ->get();
+            ->paginate(5);
         return view('work_logs.index', compact('entries'));
     }
 

@@ -69,6 +69,11 @@
                         </tr>
                     @endforeach
                 @endforeach
+                <tr>
+                    <td colspan="6" class="text-center">
+                        {{ $entries->links('pagination::bootstrap-5') }}
+                    </td>  
+                </tr>
             @endif
         </tbody>
     </table>
